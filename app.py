@@ -34,7 +34,9 @@ output_dim = 2
 dropout_rate = 0.3
 
 model = LSTMClassifier(vocab_size + 1, embedding_dim, hidden_dim, output_dim, dropout_rate)
-model.load_state_dict(torch.load('./lstm_model.pth'))
+#model.load_state_dict(torch.load('./lstm_model.pth'))
+model.load_state_dict(torch.load('./lstm_model.pth', map_location=torch.device('cpu')))#使用cpu
+
 model.eval()
 
 # 加载词汇表
