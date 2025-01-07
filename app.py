@@ -49,7 +49,11 @@ def remove_punc(text):
     return ''.join([char for char in text if char not in punctuation])
 
 # 确保停用词资源被加载
-def ensure_stopwords_downloaded():
+def ensure_resources_downloaded():
+    try:
+        nltk.data.find('tokenizers/punkt')
+    except LookupError:
+        nltk.download('punkt')
     try:
         stopwords.words('english')
     except LookupError:
@@ -57,7 +61,7 @@ def ensure_stopwords_downloaded():
 
 # 去除停用词的函数
 def remove_stop(text):
-    ensure_stopwords_downloaded()  # 确保资源已下载
+    ensure_resources_downloaded()  # 确保资源已下载
     stops = set(stopwords.words('english'))  # 加载英文停用词表
     return " ".join([word for word in text.split() if word.lower() not in stops])
 
@@ -65,7 +69,9 @@ def remove_stop(text):
 #     stops = set(stopwords.words('english'))
 #     return " ".join([word for word in text.split() if word.lower() not in stops])
 
+
 def preprocess(text):
+    ensure_resources_downloaded()
     text = text.lower()
     text = re.sub(r'https?:\/\/.*[\r\n]*', '', text, flags=re.MULTILINE)
     text = re.sub(r'<.*?>', '', text)
