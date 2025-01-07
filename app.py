@@ -54,6 +54,7 @@ def ensure_resources_downloaded():
         nltk.data.find('tokenizers/punkt')
     except LookupError:
         nltk.download('punkt')
+        nltk.download('punkt_tab')
     try:
         stopwords.words('english')
     except LookupError:
