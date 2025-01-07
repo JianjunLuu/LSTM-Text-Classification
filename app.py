@@ -1,3 +1,4 @@
+import nltk
 import streamlit as st
 import torch
 import torch.nn as nn
@@ -47,9 +48,22 @@ word_to_idx = checkpoint['word_to_idx']
 def remove_punc(text):
     return ''.join([char for char in text if char not in punctuation])
 
+# 确保停用词资源被加载
+def ensure_stopwords_downloaded():
+    try:
+        stopwords.words('english')
+    except LookupError:
+        nltk.download('stopwords')
+
+# 去除停用词的函数
 def remove_stop(text):
-    stops = set(stopwords.words('english'))
+    ensure_stopwords_downloaded()  # 确保资源已下载
+    stops = set(stopwords.words('english'))  # 加载英文停用词表
     return " ".join([word for word in text.split() if word.lower() not in stops])
+
+# def remove_stop(text):
+#     stops = set(stopwords.words('english'))
+#     return " ".join([word for word in text.split() if word.lower() not in stops])
 
 def preprocess(text):
     text = text.lower()
